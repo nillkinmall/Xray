@@ -45,8 +45,8 @@ xray() {
     shid=$(openssl rand -hex 8)
     uuid=$(/usr/local/bin/xray uuid)
     X25519Key=$(/usr/local/bin/xray x25519)
-    PrivateKey=$(echo "$X25519Key" | grep -i '^PrivateKey:' | awk '{print $2}')
-    PublicKey=$(echo "$X25519Key" | grep -E '^(PublicKey|Password):' | awk '{print $2}')
+    PrivateKey=$(echo "$X25519Key" | awk '/PrivateKey:/ {print $2}')
+    PublicKey=$(echo "$X25519Key" | awk -F': ' '/PublicKey/ {print $2}')
 
     # 配置config.json
     cat >/usr/local/etc/xray/config.json <<EOF
